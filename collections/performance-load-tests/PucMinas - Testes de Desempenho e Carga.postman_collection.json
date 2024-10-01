@@ -1,0 +1,81 @@
+{
+	"info": {
+		"_postman_id": "5d1f9507-09cb-4953-96a5-6e3b183ff352",
+		"name": "PucMinas - Testes de Desempenho e Carga",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18510599",
+		"_collection_link": "https://interstellar-eclipse-994187.postman.co/workspace/My-Workspace~b7ed7f63-2f81-4882-8f67-d8be20f4fb84/collection/18510599-5d1f9507-09cb-4953-96a5-6e3b183ff352?action=share&source=collection_link&creator=18510599"
+	},
+	"item": [
+		{
+			"name": "08 Testar resposta sob carga",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Execução para teste de desempenho\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"    pm.expect(jsonData).to.have.all.keys('quantidade', 'usuarios');\r",
+							"\r",
+							"    jsonData.usuarios.forEach(function (produto) {\r",
+							"        pm.expect(produto).to.be.an(\"object\");\r",
+							"        pm.expect(produto).to.have.all.keys('nome', 'email', 'password', 'administrador', '_id');\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urlBase}}/usuarios",
+					"host": [
+						"{{urlBase}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "09 Medir tempo de resposta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Tempo de resposta dentro do limite\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urlBase}}/usuarios",
+					"host": [
+						"{{urlBase}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

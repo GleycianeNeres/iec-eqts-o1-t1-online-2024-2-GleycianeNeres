@@ -1,0 +1,170 @@
+{
+	"info": {
+		"_postman_id": "3fc69bf2-5024-4607-a12a-811152ab6edb",
+		"name": "PucMinas - Testes de Integração",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18510599",
+		"_collection_link": "https://interstellar-eclipse-994187.postman.co/workspace/My-Workspace~b7ed7f63-2f81-4882-8f67-d8be20f4fb84/collection/18510599-3fc69bf2-5024-4607-a12a-811152ab6edb?action=share&source=collection_link&creator=18510599"
+	},
+	"item": [
+		{
+			"name": "05 Testar criação de usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Usuário criado com sucesso\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(201);\r",
+							"    pm.expect(pm.response.json()).to.have.property('message', 'Cadastro realizado com sucesso');\r",
+							"\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property('_id');\r",
+							"    const userId = responseJson._id;\r",
+							"    pm.collectionVariables.set(\"userId\", userId);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Usuário Teste\",\r\n  \"email\": \"{{userId}}@gmail.com\",\r\n  \"password\": \"123456\",\r\n  \"administrador\": \"false\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlBase}}/usuarios",
+					"host": [
+						"{{urlBase}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "06 Testar recuperação de usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Usuário recuperado com sucesso\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    \r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.all.keys('nome', 'email', 'password', 'administrador', '_id');\r",
+							"    const userNome = responseJson.nome;\r",
+							"    pm.collectionVariables.set(\"userNome\", userNome);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlBase}}/usuarios/{{userId}}",
+					"host": [
+						"{{urlBase}}"
+					],
+					"path": [
+						"usuarios",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "07 Testar atualização de usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Usuário atualizado com sucesso\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.json()).to.have.property('message', 'Registro alterado com sucesso');\r",
+							"\r",
+							"    const userId = pm.collectionVariables.get(\"userId\");\r",
+							"    const userNome = pm.collectionVariables.get(\"userNome\");\r",
+							"    pm.sendRequest(`https://serverest.dev/usuarios/${userId}`, function (err, res) {\r",
+							"        pm.expect(res).to.have.property('code', 200);\r",
+							"\r",
+							"        const retrievedUser = res.json();\r",
+							"        pm.expect(retrievedUser).to.have.property('nome', `Usuário Teste ${userId} ${userNome}`);\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Usuário Teste {{userId}} {{userNome}}\",\r\n  \"email\": \"{{userId}}@hotmail.com\",\r\n  \"password\": \"123456\",\r\n  \"administrador\": \"false\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlBase}}/usuarios/{{userId}}",
+					"host": [
+						"{{urlBase}}"
+					],
+					"path": [
+						"usuarios",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "userNome",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,92 @@
+{
+	"info": {
+		"_postman_id": "65e7c486-e1d2-4179-91f1-35ea2ad7be4b",
+		"name": "PucMinas - Testes de Contrato",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18510599",
+		"_collection_link": "https://interstellar-eclipse-994187.postman.co/workspace/My-Workspace~b7ed7f63-2f81-4882-8f67-d8be20f4fb84/collection/18510599-65e7c486-e1d2-4179-91f1-35ea2ad7be4b?action=share&source=collection_link&creator=18510599"
+	},
+	"item": [
+		{
+			"name": "01 Validar campos esperados",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Campos esperados validados\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"    pm.expect(jsonData).to.have.all.keys('quantidade', 'usuarios');\r",
+							"\r",
+							"    jsonData.usuarios.forEach(function (produto) {\r",
+							"        pm.expect(produto).to.be.an(\"object\");\r",
+							"        pm.expect(produto).to.have.all.keys('nome', 'email', 'password', 'administrador', '_id');\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urlBase}}/usuarios",
+					"host": [
+						"{{urlBase}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "02 Validar tipo de dados",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Tipo de dados validados\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"    pm.expect(jsonData).to.have.property(\"quantidade\").to.be.a(\"number\");\r",
+							"    pm.expect(jsonData).to.have.property(\"usuarios\").to.be.an(\"array\");\r",
+							"    \r",
+							"    jsonData.usuarios.forEach(function(produto) {\r",
+							"        pm.expect(produto).to.be.an(\"object\");\r",
+							"        pm.expect(produto).to.have.property(\"nome\").to.be.a(\"string\");\r",
+							"        pm.expect(produto).to.have.property(\"email\").to.be.a(\"string\");\r",
+							"        pm.expect(produto).to.have.property(\"password\").to.be.a(\"string\");\r",
+							"        pm.expect(produto).to.have.property(\"administrador\").to.be.a(\"string\");\r",
+							"        pm.expect(produto).to.have.property(\"_id\").to.be.a(\"string\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urlBase}}/usuarios",
+					"host": [
+						"{{urlBase}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
